@@ -7,36 +7,55 @@ type Nat {
 
 // Doubles a number
 dbl(a: Nat): Nat // double
-
-  ?b
+  case a {
+    zero: Nat.zero
+    succ: Nat.succ(Nat.succ(dbl(a.pred)))
+  }
 
 // Addition
 add(a: Nat, b: Nat): Nat
-
-  ?a
+  case a {
+    zero: b
+    succ: case b {
+      zero: a
+      succ: Nat.succ(add(a, b.pred))
+    }
+  }
 
 // Multiplication
 mul(a: Nat, b: Nat): Nat
-  
-  ?m
+  case a {
+    zero: Nat.zero   
+    succ: add(mul(a.pred, b),  b)
+  }
 
 // Subtraction
 // 4 - 5 = 0
 // 5 - 4 = 1
 sub(a: Nat, b: Nat): Nat
-
-  ?s
+  case a {
+    zero: Nat.zero
+    succ: case b {
+      zero: a
+      succ: (sub(a.pred, b.pred))
+    }
+  }
 
 // Factorial
 // 4! = 24
 fac(a: Nat): Nat 
-  
-  ?f
+  case a {
+    zero: Nat.zero
+    succ: mul(a, fac(a.pred))
+  }
 
 // Equal
 eql(a: Nat, b: Nat): Bool // Given 2 numbers, it returns true if the 2 are the same and false if they are different.
-  
-  ?e 
+  case a b {
+    zero zero: true
+    succ succ: eql(a.pred, b.pred)
+  }
+  default false 
 
 // Do not use the "not" function to create the functions below
 
@@ -44,29 +63,40 @@ eql(a: Nat, b: Nat): Bool // Given 2 numbers, it returns true if the 2 are the s
 // 2 > 1 = True
 // 3 > 3 = False
 gtn(a: Nat, b: Nat): Bool // if A > B == True else false
-  
-  ?g
+  case a {
+    zero: false
+    succ: case b {
+      zero: true
+      succ: gtn(a.pred, b.pred)
+    }
+  }
 
 // Lower than
 // 1 < 2 = True
 // 3 < 3 = False
 ltn(a: Nat, b: Nat): Bool // if A > B == False else true 
-  
-  ?l
+  case a b{
+    zero succ: true
+    succ succ: ltn(a.pred, b.pred)
+  } default false
 
 // Minimum
 // min(2, 3) = 2
 // min(4, 1) = 1
 min(a: Nat, b: Nat): Nat // if A < B then A else B
-  
-  ?m2
+  case ltn(a, b) {
+    true: a
+    false: b
+  }
 
 // Maximum
 // max(2, 3) = 3
 // max(4, 1) = 4
 max(a: Nat, b: Nat): Nat // if A > B then A else B
-  
-  ?m3
+  case gtn(a, b) {
+    true: a
+    false: b
+  }
 
 
 // Divides a number by two
@@ -74,16 +104,23 @@ max(a: Nat, b: Nat): Nat // if A > B then A else B
 // 5 / 2 = 2
 // 1 / 2 = 0
 hlf(a: Nat): Nat
-  ?h
+  case ltn(a, 2) {
+    true: Nat.zero
+    false: Nat.succ(hlf(sub(a, 2)))
+  }
 
 // Division
 // 1 / 2 = 0
 // x / 0 = 0
 // 5 / 2 = 2
 div(a: Nat, b: Nat): Nat // division
-  
-  ?d
-
+  case a {
+    zero: Nat.zero
+    succ: case sub(b,a) {
+        zero: Nat.succ(div(sub(a, b), b))
+        succ: Nat.zero
+      }
+  }
 
 ex_04: IO<Unit>
   IO {

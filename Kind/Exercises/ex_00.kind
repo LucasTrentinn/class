@@ -1,60 +1,84 @@
-// Basic Exercises involving Bools
-
-type Bool {
-  true
-  false
-}
-
-// Is true
-// Returns true if input is true
-is_true(a: Bool): Bool
-  ?a 
-
-
-// Is false
-// Returns true if input is false
-is_false(a: Bool): Bool
-  ?b
-
 // Negation
 // Returns the opposite of a Bool
 neg(b: Bool): Bool 
-  ?c
+  case b {
+    true: false
+    false: true
+  }
 
 // And
 // Returns true if both inputs are true
 and(a: Bool, b: Bool): Bool
-  ?d
+  case a {
+    false: false
+    true: case b {
+      true: true
+      false: false
+    }
+  }
 
 // Or
 // Returs true if any input is true
 or(a: Bool, b: Bool): Bool
-  ?e
+  case a {
+    true: true
+    false: b
+  }
 
 // Equal
 // Returs true if both inputs are identical
 eql(a: Bool, b: Bool): Bool
-  ?f
+  case a {
+    true: b
+    false: case b {
+      true: false
+      false: true
+    }
+  }
 
 // Xor
 // Returns true if both inputs are different
 xor(a: Bool, b: Bool): Bool
-  ?g
+  case a {
+    false: b
+    true: case b {
+      true: false
+      false: true
+    }
+  }
 
 // Nor
 // Returns true if both inputs are false
 nor(a: Bool, b: Bool): Bool
-  ?h
+  case a {
+    true: false
+    false: case b {
+      true: false
+      false: true
+    }
+  }
 
 // Nand
 // Returns false only if both inputs are true
 nand(a: Bool, b: Bool): Bool
-  ?i
+  case a {
+    false: true
+    true: case b {
+      true: false
+      false: true
+    }
+  }
 
 // Xnor
 // Returns true if both inputs are identical
 xnor(a: Bool, b: Bool): Bool
-  ?j
+  case a {
+    true: b
+    false: case b {
+      true: false
+      false: true
+    }
+  }
 
 
 ex_00: IO<Unit>
